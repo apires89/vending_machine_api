@@ -36,6 +36,7 @@ gem "devise"
 gem 'money-rails', '~>1.12'
 gem 'devise-jwt'
 gem 'rack-cors'
+gem 'fast_jsonapi'
 #gem 'pundit'
 
 group :development, :test do

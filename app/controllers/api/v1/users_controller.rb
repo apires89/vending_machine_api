@@ -8,7 +8,7 @@ class Api::V1::UsersController < Api::V1::BaseController
     if current_user.role == "buyer" && current_user.update(deposit: 0)
         render json: current_user, status: :ok
     else
-        render json: { message: "Not a customer, or something went wrong.", data: current_user.errors.full_messages, status: "failed" }, status: :unprocessable_entity
+        render json: { message: "Not a buyer, or something went wrong.", data: current_user.errors.full_messages, status: "failed" }, status: :unprocessable_entity
     end
   end
 

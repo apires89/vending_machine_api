@@ -2,14 +2,15 @@ class Users::SessionsController < Devise::SessionsController
   respond_to :json
 
   private
-  
+
   def respond_with(resource, _opts = {})
-    if resource.persisted?
-      render json: { message: 'You are logged in.' }, status: :ok
+    if resource.email == params[:user][:email] && resource.role == params[:user][:role]
+      render json: { message: 'You are logged in.' }, data: UserSerializer.new(resource).serializable_hash[:data][:attributes], status: :ok
     else
-      render json: { error: resource.errors.full_messages }, status: :unprocessable_entity
+      render json: { message: 'The resource is not the same as the request, logout first.' }, status: :unprocessable_entity
     end
   end
+
 
 
   def respond_to_on_destroy
