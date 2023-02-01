@@ -2,10 +2,15 @@ class Users::SessionsController < Devise::SessionsController
   respond_to :json
 
   private
-
+  
   def respond_with(resource, _opts = {})
-    render json: { message: 'You are logged in.' }, status: :ok
+    if resource.persisted?
+      render json: { message: 'You are logged in.' }, status: :ok
+    else
+      render json: { error: resource.errors.full_messages }, status: :unprocessable_entity
+    end
   end
+
 
   def respond_to_on_destroy
     jwt_payload = JWT.decode(request.headers['Authorization'].split(' ')[1],
