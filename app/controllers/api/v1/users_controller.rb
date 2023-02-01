@@ -42,6 +42,6 @@ class Api::V1::UsersController < Api::V1::BaseController
 
   def valid_deposit_amount
     valid_amount = [5,10,20,50,100]
-    valid_amount.include?(deposit_params["deposit"])
+    valid_amount.include?(deposit_params["deposit"].to_i)
   end
 end

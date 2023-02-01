@@ -10,11 +10,12 @@ RSpec.describe Api::V1::UsersController, type: :controller do
 
     context "with valid deposit amount" do
       it "adds deposit to user's account" do
+        previous_deposit = user.deposit.cents
         deposit_amount = 50
         post :deposit, params: { user: { deposit: deposit_amount } }
 
         expect(response).to have_http_status(:ok)
-        expect(user.reload.deposit).to eq deposit_amount
+        expect(user.reload.deposit.cents).to eq previous_deposit + deposit_amount
       end
     end
 
