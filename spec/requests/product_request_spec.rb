@@ -15,6 +15,40 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
       expect(JSON.parse(response.body)).to match_array(products.as_json)
     end
   end
+  describe "POST #create" do
+    let(:user) { FactoryBot.create(:seller) }
+    before do
+      sign_in user
+    end
+
+    context "with valid attributes" do
+      let(:valid_attributes) { FactoryBot.attributes_for(:product) }
+
+      it "creates a new product" do
+        expect { post :create, params: { product: valid_attributes } }.to change(Product, :count).by(1)
+      end
+
+      it "returns the product" do
+        post :create, params: { product: valid_attributes }
+        expect(response).to have_http_status(:created)
+        expect(JSON.parse(response.body)).to eq(Product.last.as_json)
+      end
+    end
+
+    context "with invalid attributes" do
+      let(:invalid_attributes) { FactoryBot.attributes_for(:product, productName: nil) }
+
+      it "does not create a new product" do
+        expect { post :create, params: { product: invalid_attributes } }.to_not change(Product, :count)
+      end
+
+      it "returns an error" do
+        post :create, params: { product: invalid_attributes }
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(JSON.parse(response.body)["data"]).to include("Productname can't be blank")      end
+    end
+  end
+
 
   describe "POST #buy" do
     let(:user) { FactoryBot.create(:seller) }
