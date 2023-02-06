@@ -4,7 +4,7 @@ class Users::SessionsController < Devise::SessionsController
   private
 
   def respond_with(resource, _opts = {})
-    if resource.email == params[:user][:email] && resource.role == params[:user][:role]
+    if resource.email == params[:user][:email]
       render json: { message: 'You are logged in.' }, data: UserSerializer.new(resource).serializable_hash[:data][:attributes], status: :ok
     else
       render json: { message: 'The resource is not the same as the request, logout first.' }, status: :unprocessable_entity
